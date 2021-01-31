@@ -1,0 +1,44 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "stevedore documentation"
+
+theme = "hugo-geekdoc"
+
+weight = 20
+
+# Geekdoc required configuration
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+disablePathToLower = true
+
+# Needed for mermaid shortcodes
+[markup]
+  [markup.goldmark.renderer]
+    # Needed for mermaid shortcode
+    unsafe = true
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 9
+
+[params]
+  name = "gostevedore"
+  title ="stevedore, a way to manage and govern the Docker image's building process"
+  description = "Stevedore is a useful tool when you need to manage a bunch of Docker images in a standardized way, such on a microservices architecture. It lets you to define how to build your Docker images and their parent-child relationship. It builds automatically the children images when parent ones are done. And many other features which improve the Docker image's building process. Is not a Dockerfile's alternative, but how to use them to build your images"
+  author = "Aleix Penella"
+  image = "https://gostevedore.github.io/images/logo.png"
+
+  # Set a description for the current page. This will be shown in toc-trees objects.
+  geekdocDescription = "stevedore, a way to manage and govern the Docker's image building process"
+
+  # (Optional, default 6) Set how many table of contents levels to be showed on page.
+  # Use false to hide ToC, note that 0 will default to 6 (https://gohugo.io/functions/default/)
+  # You can also specify this parameter per page in front matter.
+  geekdocToC = 3
+
+  # (Optional, default static/brand.svg) Set the path to a logo for the Geekdoc
+  # relative to your 'static/' folder.
+  geekdocLogo = "images/logo.svg"
+
+  # (Optional, default true) Enables search function with flexsearch.
+  # Index is built on the fly and might slowdown your website.
+  geekdocSearch = true

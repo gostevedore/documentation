@@ -1,0 +1,10 @@
+---
+more:
+  - name: Releases and Downloads
+    ref: "https://github.com/gostevedore/stevedore/releases"
+    external: true
+    icon: "download"
+  - name: "View Source"
+    ref: "https://github.com/gostevedore/stevedore"
+    external: true
+    icon: "github"

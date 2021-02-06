@@ -4,16 +4,18 @@ date: "2020-01-31"
 weight: -20
 ---
 
+{{<toc>}}
+
 ## Download and install stevedore
 
 {{< hint info >}}
-stevedore has been developed and tested on amd64 architecture and Linux os, for that reason the amd64-Linux tarball is available.
+stevedore has been developed and tested on amd64 architecture and Linux os, for that reason the only available tarball is for amd64-Linux tarball.
 In case you are running another arch or os, you could build it from source.
 {{< /hint >}}
 
 ### Install from tarball
 
-1. Achieve *stevedore*'s tarball
+1. Achieve *Stevedore*'s tarball
 ```
 curl -sL https://github.com/gostevedore/stevedore/releases/download/v0.10.0/stevedore_0.10.0_Linux-x86_64.tar.gz > stevedore_0.10.0_Linux-x86_64.tar.gz
 ```
@@ -39,7 +41,9 @@ git clone https://github.com/gostevedore/stevedore.git
 ```
 make build
 ```
-You can also run `make tar` to generate a tarball ,under `dist`folder, containing the binary. 
+You can also run `make tar` to generate a tarball, under `dist` folder, containing the binary.
+
+#### Use Goreleaser to create an snapshot
 In case you want to use [goreleaser] to generate an snapshot you can run `make snapshot`.
 
 ## Initialize the stevedore project

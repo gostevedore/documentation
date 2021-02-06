@@ -42,3 +42,7 @@ disablePathToLower = true
   # (Optional, default true) Enables search function with flexsearch.
   # Index is built on the fly and might slowdown your website.
   geekdocSearch = true
+
+  # (Optional, default true) Show page navigation links at the bottom of each
+  # docs page (bundle menu only).
+  geekdocNextPrev = true

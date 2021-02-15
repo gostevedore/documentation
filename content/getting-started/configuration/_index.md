@@ -118,7 +118,7 @@ List of templates which define those extra tags to generate when 'semantic_versi
 
 ### **builders**
 Define `global` builders. You could define `global` builders on its own file. Stevedore will look up for builders on the file set at [builder_path]({{<ref "/getting-started/configuration/#builder_path">}})
- For further information see the [reference guide]({{<ref "/reference-guide">}}).
+ For further information see the [reference guide]({{<ref "/reference-guide/builder/#global-builder">}}).
 
 ### **images_tree**
 Define images tree. You could define an images tree on its own file. Stevedore will look up for images tree on the file set at [tree_path]({{<ref "/getting-started/configuration/#tree_path">}})

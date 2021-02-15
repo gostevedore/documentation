@@ -42,7 +42,8 @@ On that other snipped is defined an in-line builder:
         driver: docker
         options:
             context:
-                git: https://github.com/apenella/simple-go-helloworld.git
+                git: 
+                    repository: https://github.com/apenella/simple-go-helloworld.git
         variables_mapping:
           image_name_key: image
           image_tag_key: tag
@@ -133,3 +134,8 @@ Promote an image, on Stevedore context, means to push an image to another Docker
 
 ### Semver tag
 When a tag is [semver 2.0.0](https://semver.org/) compliance is known as semver tag.
+
+### Wildcard version
+
+### Variables mapping
+A variables mapping (a.k.a. varmap or varmapping) is a builder's optional attribute where are defined the name of those variable that are automatically passed to the driver, when is built an image. Each driver could define its own varmap. For further information see the [reference guide]({{<ref "/reference-guide/builder/#variables-mapping-reference">}})

@@ -3,22 +3,177 @@ title: Builder
 weight: 20
 ---
 
-{{< hint warning >}}
-TODO
-{{< /hint >}}
+{{<toc>}}
 
+## General Description
+A Builder holds those parameters required by a driver to proceed with the building request, such the build context or the Dockerfile location, for instance. To create a new builder, it must be defnied a [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, having the properties described below on that document.
+
+Builders could be defined as `global`, in that case it can be used by any image, and must be placed under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), or could be defined inside the image definition, and it is known as `in-line` builder.
+
+### Global builder
+Global builders are those builders that are defined under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) and could be used by any image on the images tree. 
+On [Stevedore configuration]({{<ref "/getting-started/configuration">}}) is set the [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}), where is found the `global` builders file location. On that file must be created a block under the key property `builders` where are placed the global builders.
+
+For example, when `builder_path` is set on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) as below:
+{{<highlight Yaml "linenos=table">}}
+builder_path: stevedore_builders.yaml
+{{</highlight>}}
+
+Stevedore looks for the key block `builders` on the file `stevedore_builders.yaml` and loads those builders that has been defined.
+{{<highlight Yaml "linenos=table">}}
+builders:
+    builder1:
+        driver: docker
+        options:
+            context:
+                path: ./my-apps-golang
+    builder2:
+        driver: docker
+        options:
+            context:
+                path: ./my-apps-phyton
+    builder2:
+        driver: ansible-playbook
+        options:
+            playbook: my-apps-base/site.yml
+            inventory: my-apps-base/all
+{{</highlight>}}
+
+### In-line builder
+
+## Properties reference
+
+On next table are descrived those attributes that could be included on builder definition:
+|Property|Type|Description|Value|
+|---|:---:|---|---|
+|**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When a builder is defined as `global` its value is the yaml object's `key` where the builder is being defined. In case that a builder is defined such an `in-line` builder, its value is the same as the image's name|
+|**driver**|*string*|Driver to use by the builder<br><font color="#AA0088">*mandatory*</font>|The allowed values are:<br> - **ansible-playbook**<br> - **docker**|
+|**options**|*yaml object*| Options hold the specific configuration for a builder<br><font color="#AA0088">*mandatory*</font>|Each driver requires its own configuration parameters.<br>Refer to [options reference]({{<ref "/reference-guide/builder/#options">}}) for detailed description|
+|**variables_mapping**|*yaml object*|<br><font color="#AA0088">*optional*</font>||
+
+### Options reference
+
+{{<tabs "builder-options">}}
+
+{{<tab "docker">}}
+### docker
+Here is described builder's configuration options for `docker` driver.
+
+#### Builder options
+|Property|Type|Description|Value|
+|---|:---:|---|---|
+|**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build and image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>||
+|**dockerfile**|*string*|`Dockerfiles`'s location path. The path is relative to context root<br><font color="#AA0088">*optional*</font>|By default, is used the `Dockerfile` located at context root|
+
+##### Path context
+
+- Example
+{{<highlight Yaml "linenos=table">}}
+    code:
+        driver: docker
+        options:
+            context:
+                path: .
+{{</highlight>}}
+
+##### Git context 
+Git
+    repository
+    reference
+
+- Example
+{{<highlight Yaml "linenos=table">}}
+    code:
+        driver: docker
+        options:
+            context:
+                git: 
+                    repository: https://github.com/apenella/simple-go-helloworld.git
+{{</highlight>}}
+{{</tab>}}
+
+{{<tab "ansible-playbook">}} 
+### ansible-playbook 
+Here is described builder's configuration options for `ansible-playbook` driver.
+
+#### Builder options
+|Property|Type|Description|Value|
+|---|:---:|---|---|
+|**playbook**|*string*|Is the playbook file location path<br><font color="#AA0088">*mandatory*</font>||
+|**inventory**|*string*|<br><font color="#AA0088">*mandatory*</font>||
+
+#### Example
+{{<highlight Yaml "linenos=table">}}
+    infrastructure:
+        driver: ansible-playbook
+        options:
+            inventory: inventory/all
+            playbook: build_applications.yml
+{{</highlight>}}
+{{</tab>}}
+
+{{</tabs>}}
+
+
+### Variables mapping reference
+
+{{<tabs "builder-varmap">}}
+{{<tab "docker">}}
+|Key name|Description|Default Value|
+|---|---|---|
+|**image_builder_name_key**|               // Not comming from build's command flag|image_builder_name|
+|**image_builder_tag_key**|                // Not comming from build's command flag|image_builder_tag|
+|**image_builder_registry_namespace_key**| // Not comming from build's command flag|image_builder_registry_namespace|
+|**image_builder_registry_host_key**|      // Not comming from build's command flag|image_builder_registry_host|
+|**image_builder_label_key**||image_builder_label|
+|**image_from_name_key**||image_from_name|
+|**image_from_tag_key**||image_from_tag|
+|**image_from_registry_namespace_key**||image_from_registry_namespace|
+|**image_from_registry_host_key**||image_from_registry_host|
+|**image_name_key**||image_name|
+|**image_tag_key**||image_tag|
+|**image_extra_tags_key**||image_extra_tags|
+|**image_registry_namespace_key**||image_registry_namespace|
+|**image_registry_host_key**||image_registry_host|
+|**push_image_key**||push_image|
+{{</tab>}}
+
+{{<tab "ansible-playbook">}}
+|Key name|Description|Default Value|
+|---|---|---|
+|**image_builder_name_key**|               // Not comming from build's command flag|image_builder_name|
+|**image_builder_tag_key**|                // Not comming from build's command flag|image_builder_tag|
+|**image_builder_registry_namespace_key**| // Not comming from build's command flag|image_builder_registry_namespace|
+|**image_builder_registry_host_key**|      // Not comming from build's command flag|image_builder_registry_host|
+|**image_builder_label_key**||image_builder_label|
+|**image_from_name_key**||image_from_name|
+|**image_from_tag_key**||image_from_tag|
+|**image_from_registry_namespace_key**||image_from_registry_namespace|
+|**image_from_registry_host_key**||image_from_registry_host|
+|**image_name_key**||image_name|
+|**image_tag_key**||image_tag|
+|**image_extra_tags_key**||image_extra_tags|
+|**image_registry_namespace_key**||image_registry_namespace|
+|**image_registry_host_key**||image_registry_host|
+|**push_image_key**||push_image|
+{{</tab>}}
+
+{{</tabs>}}
+
+## Builder definition
 Builder definition must match to golang struct defined below. Options structure depends on each driver.
-{{< highlight golang "linenos=table" >}}
+{{<highlight golang "linenos=table">}}
     type Builder struct {
-        Name    string                 #u0060yaml:"name"#u0060
-        Driver  string                 #u0060yaml:"driver"#u0060
-        Options map[string]interface{} #u0060yaml:"options"#u0060
+        Name        string                 `yaml:"name"`
+        Driver      string                 `yaml:"driver"`
+        Options     map[string]interface{} `yaml:"options"`
+        VarMapping  varsmap.Varsmap        `yaml:"variables_mapping"`
     }
-{{< /highlight>}}
+{{</highlight>}}
 
 Set of builders must match to golang struct defined below
-{{< highlight golang "linenos=table" >}}
+{{<highlight golang "linenos=table">}}
     type Builders struct {
-        Builders map[string]*Builder #u0060yaml:"builders"#u0060
+        Builders map[string]*Builder `yaml:"builders"`
     }
-{{< /highlight>}}
+{{</highlight>}}

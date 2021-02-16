@@ -6,20 +6,21 @@ weight: 20
 {{<toc>}}
 
 ## General Description
-A Builder holds those parameters required by a driver to proceed with the building request, such the build context or the Dockerfile location, for instance. To create a new builder, it must be defnied a [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, having the properties described below on that document.
+A Builder holds those parameters required by a driver to proceed with the Docker's image building request, such the build context or its Dockerfile location, for instance. A builder is defnied by [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, following the specifications described below, on [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builders-configuration">}}).
 
-Builders could be defined as `global`, in that case it can be used by any image, and must be placed under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), or could be defined inside the image definition, and it is known as `in-line` builder.
+Builders can be defined as `global`, and could be used by any image, in that case the builder must be placed under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), or can be also defined inside the image definition, and it is known as `in-line` builder.
 
 ### Global builder
-Global builders are those builders that are defined under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) and could be used by any image on the images tree. 
-On [Stevedore configuration]({{<ref "/getting-started/configuration">}}) is set the [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}), where is found the `global` builders file location. On that file must be created a block under the key property `builders` where are placed the global builders.
+Global builders are those builders that are defined under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) and con be used by any image on the images tree.
 
-For example, when `builder_path` is set on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) as below:
+To include a `global` builder on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), it must be edited the file specified in [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}) configuration parameter, and place there the new definition, under the `builders`.
+
+For example, when `builder_path` is set as below:
 {{<highlight Yaml "linenos=table">}}
 builder_path: stevedore_builders.yaml
 {{</highlight>}}
 
-Stevedore looks for the key block `builders` on the file `stevedore_builders.yaml` and loads those builders that has been defined.
+It must be edited the file `stevedore_builders.yaml` to include there the new builder.
 {{<highlight Yaml "linenos=table">}}
 builders:
     builder1:
@@ -39,12 +40,28 @@ builders:
             inventory: my-apps-base/all
 {{</highlight>}}
 
-### In-line builder
+The [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}) value could be also achieved through Stevedore CLI.
+```bash
+$ stevedore get configuration
+PARAMETER                       VALUE
+tree_path                       stevedore.yaml
+builder_path                    stevedore.yaml
+log_path                        /dev/null
+num_workers                     4
+push_images                     true
+build_on_cascade                false
+docker_registry_credentials_dir ~/.config/stevedore/credentials
+semantic_version_tags_enabled   false
+semantic_version_tags_templates [{{ .Major }}.{{ .Minor }}.{{ .Patch }}]
+```
 
-## Properties reference
+### In-line builder
+//TODO
+
+## Keywords reference for builders configuration
 
 On next table are descrived those attributes that could be included on builder definition:
-|Property|Type|Description|Value|
+|Keyword|Type|Description|Value|
 |---|:---:|---|---|
 |**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When a builder is defined as `global` its value is the yaml object's `key` where the builder is being defined. In case that a builder is defined such an `in-line` builder, its value is the same as the image's name|
 |**driver**|*string*|Driver to use by the builder<br><font color="#AA0088">*mandatory*</font>|The allowed values are:<br> - **ansible-playbook**<br> - **docker**|
@@ -60,7 +77,7 @@ On next table are descrived those attributes that could be included on builder d
 Here is described builder's configuration options for `docker` driver.
 
 #### Builder options
-|Property|Type|Description|Value|
+|Keyword|Type|Description|Value|
 |---|:---:|---|---|
 |**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build and image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>||
 |**dockerfile**|*string*|`Dockerfiles`'s location path. The path is relative to context root<br><font color="#AA0088">*optional*</font>|By default, is used the `Dockerfile` located at context root|
@@ -97,7 +114,7 @@ Git
 Here is described builder's configuration options for `ansible-playbook` driver.
 
 #### Builder options
-|Property|Type|Description|Value|
+|Keyword|Type|Description|Value|
 |---|:---:|---|---|
 |**playbook**|*string*|Is the playbook file location path<br><font color="#AA0088">*mandatory*</font>||
 |**inventory**|*string*|<br><font color="#AA0088">*mandatory*</font>||

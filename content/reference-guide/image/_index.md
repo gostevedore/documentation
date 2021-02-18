@@ -19,3 +19,8 @@ Parser will use the SemVer struct to generate the template, and all SemVer attri
    	Build      string
    }
 {{< /highlight>}}
+
+Template variables available:
+{{.Name}}
+{{.Parent}}
+{{.Version}}

@@ -6,12 +6,12 @@ weight: 20
 {{<toc>}}
 
 ## General Description
-A Builder holds those parameters required by a driver to proceed with the Docker's image building request, such the build context or its Dockerfile location, for instance. A builder is defnied by [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, following the specifications described below, on [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builders-configuration">}}).
+A builder holds those parameters required by a driver to proceed with the Docker's image building request, such the build context or its Dockerfile location, for instance. A builder is defnied by [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, following the specifications described below, on [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builder-configuration">}}).
 
 Builders can be defined as `global`, and could be used by any image, in that case the builder must be placed under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), or can be also defined inside the image definition, and it is known as `in-line` builder.
 
 ### Global builder
-Global builders are those builders that are defined under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) and con be used by any image on the images tree.
+Global builders are those builders that are defined under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) and can be used by any image on the images tree. 
 
 To include a `global` builder on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), it must be edited the file specified in [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}) configuration parameter, and place there the new definition, under the `builders`.
 
@@ -20,7 +20,7 @@ For example, when `builder_path` is set as below:
 builder_path: stevedore_builders.yaml
 {{</highlight>}}
 
-It must be edited the file `stevedore_builders.yaml` to include there the new builder.
+It must be edited the file `stevedore_builders.yaml` to include there the new builder. On next example are defined builder1, builder2 and builder3.
 {{<highlight Yaml "linenos=table">}}
 builders:
     builder1:
@@ -56,20 +56,33 @@ semantic_version_tags_templates [{{ .Major }}.{{ .Minor }}.{{ .Patch }}]
 ```
 
 ### In-line builder
-//TODO
+When is needed to build an image using an adhoc driver configuration, and to simplify the Stevedore configuration, the builder could be defined inside the [image configuration]({{<ref "reference-guide/image/">}}), in that case the builder is known as an `in-line` builder. 
+In-line builders are also defined following the [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builder-configuration">}}).
 
-## Keywords reference for builders configuration
+{{< highlight Yaml "linenos=table" >}}
+my-image-base:
+    "0.0.1":
+        registry: my-registry.my-domain.cat 
+        namespace: library
+        builder:
+            driver: docker
+            options:
+                context:
+                    path: my-image-base
+{{< /highlight >}}
 
-On next table are descrived those attributes that could be included on builder definition:
+## Keywords reference for builder configuration
+
+On next table are described those keywords attributes that could be included on a builder definition:
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
 |**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When a builder is defined as `global` its value is the yaml object's `key` where the builder is being defined. In case that a builder is defined such an `in-line` builder, its value is the same as the image's name|
-|**driver**|*string*|Driver to use by the builder<br><font color="#AA0088">*mandatory*</font>|The allowed values are:<br> - **ansible-playbook**<br> - **docker**|
-|**options**|*yaml object*| Options hold the specific configuration for a builder<br><font color="#AA0088">*mandatory*</font>|Each driver requires its own configuration parameters.<br>Refer to [options reference]({{<ref "/reference-guide/builder/#options">}}) for detailed description|
-|**variables_mapping**|*yaml object*|<br><font color="#AA0088">*optional*</font>||
+|**driver**|*string*|Driver to be used to build the image<br><font color="#AA0088">*mandatory*</font>|The allowed values are:<br> - **ansible-playbook**<br> - **docker**|
+|**options**|*yaml object*|Options holds those parameters required by the driver<br><font color="#AA0088">*mandatory*</font>|Each driver requires its own configuration parameters.<br>Refer to [options reference]({{<ref "/reference-guide/builder/#options">}}) for detailed description|
+|**variables_mapping**|*yaml object*|Maps a relationship from image’s attributs  to driver variables/parameteres/arguments<br><font color="#AA0088">*optional*</font>|Each driver requires its own variables mapping.<br>Refer to [variables mapping]({{<ref "/reference-guide/builder/#variables-mapping-reference">}})|
 
 ### Options reference
-
+On the tabs below is defined the options reference for each driver.
 {{<tabs "builder-options">}}
 
 {{<tab "docker">}}
@@ -79,11 +92,13 @@ Here is described builder's configuration options for `docker` driver.
 #### Builder options
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build and image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>||
+|**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build and image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>|Each context type has its own specifications [path]({{<ref "reference-guide/builder/#path-context">}}) [git]({{<ref "reference-guide/builder/#git-context">}})|
 |**dockerfile**|*string*|`Dockerfiles`'s location path. The path is relative to context root<br><font color="#AA0088">*optional*</font>|By default, is used the `Dockerfile` located at context root|
-
+---
 ##### Path context
-
+|Keyword|Type|Description|Value|
+|---|:---:|---|---|
+|path||||
 - Example
 {{<highlight Yaml "linenos=table">}}
     code:
@@ -97,7 +112,11 @@ Here is described builder's configuration options for `docker` driver.
 Git
     repository
     reference
-
+|Keyword|Type|Description|Value|
+|---|:---:|---|---|
+|git||||
+|repository||||
+|reference||||
 - Example
 {{<highlight Yaml "linenos=table">}}
     code:

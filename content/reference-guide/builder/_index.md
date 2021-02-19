@@ -73,16 +73,16 @@ my-image-base:
 
 ## Keywords reference for builder configuration
 
-On next table are described those keywords attributes that could be included on a builder definition:
+On next table are described builder keywords attributes:
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When a builder is defined as `global` its value is the yaml object's `key` where the builder is being defined. In case that a builder is defined such an `in-line` builder, its value is the same as the image's name|
+|**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When is created a `global` builder, its name is set by default as the yaml object's `key` where the builder is being defined. In case that the builder is defined such an `in-line` builder, its name is set as the image's name.|
 |**driver**|*string*|Driver to be used to build the image<br><font color="#AA0088">*mandatory*</font>|The allowed values are:<br> - **ansible-playbook**<br> - **docker**|
-|**options**|*yaml object*|Options holds those parameters required by the driver<br><font color="#AA0088">*mandatory*</font>|Each driver requires its own configuration parameters.<br>Refer to [options reference]({{<ref "/reference-guide/builder/#options">}}) for detailed description|
-|**variables_mapping**|*yaml object*|Maps a relationship from image’s attributs  to driver variables/parameteres/arguments<br><font color="#AA0088">*optional*</font>|Each driver requires its own variables mapping.<br>Refer to [variables mapping]({{<ref "/reference-guide/builder/#variables-mapping-reference">}})|
+|**options**|*yaml object*|Options holds those parameters required by the driver<br><font color="#AA0088">*mandatory*</font>|Each driver requires its own configuration parameters.<br>Refer to [options reference]({{<ref "/reference-guide/builder/#options">}}) for detailed description.|
+|**variables_mapping**|*yaml object*|Maps a relationship from image’s attributs  to driver variables/parameteres/arguments<br><font color="#AA0088">*optional*</font>|Each driver requires its own variables mapping.<br>Refer to [variables mapping]({{<ref "/reference-guide/builder/#variables-mapping-reference">}}) for detailed description.|
 
 ### Options reference
-On the tabs below is defined the options reference for each driver.
+On the tabs below are described how to define the options yaml object for each driver.
 {{<tabs "builder-options">}}
 
 {{<tab "docker">}}
@@ -92,13 +92,13 @@ Here is described builder's configuration options for `docker` driver.
 #### Builder options
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build and image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>|Each context type has its own specifications [path]({{<ref "reference-guide/builder/#path-context">}}) [git]({{<ref "reference-guide/builder/#git-context">}})|
+|**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build an image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>|Each context type has its own specifications.<br>Refer [here]({{<ref "reference-guide/builder/#path-context">}}) for the `path` context details.<br>Refer [here]({{<ref "reference-guide/builder/#git-context">}}) for the `git` context details.|
 |**dockerfile**|*string*|`Dockerfiles`'s location path. The path is relative to context root<br><font color="#AA0088">*optional*</font>|By default, is used the `Dockerfile` located at context root|
 ---
 ##### Path context
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|path||||
+|**path**|string|Path specifies where to find the files required to build the image<br><font color="#AA0088">*mandatory*</font>|-|
 - Example
 {{<highlight Yaml "linenos=table">}}
     code:
@@ -106,6 +106,7 @@ Here is described builder's configuration options for `docker` driver.
         options:
             context:
                 path: .
+            dockerfile: build/Dockerfile
 {{</highlight>}}
 
 ##### Git context 
@@ -114,9 +115,9 @@ Git
     reference
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|git||||
-|repository||||
-|reference||||
+|git|*yaml object*|<br><font color="#AA0088">*mandatory*</font>|-|
+|repository|string|Repository specifies the git repository to find the files to build the image<br><font color="#AA0088">*mandatory*</font>|-|
+|reference|string|Repository reference to use to build the image<br><font color="#AA0088">*optional*</font>|By default, is used [`refs/heads/master`](https://pkg.go.dev/github.com/go-git/go-git/v5@v5.0.0/plumbing#ReferenceName) reference.|
 - Example
 {{<highlight Yaml "linenos=table">}}
     code:
@@ -125,6 +126,8 @@ Git
             context:
                 git: 
                     repository: https://github.com/apenella/simple-go-helloworld.git
+                    reference: v0.0.0
+                dockerfile: build/Dockerfile
 {{</highlight>}}
 {{</tab>}}
 

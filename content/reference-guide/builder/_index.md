@@ -127,7 +127,7 @@ Git
                 git: 
                     repository: https://github.com/apenella/simple-go-helloworld.git
                     reference: v0.0.0
-                dockerfile: build/Dockerfile
+            dockerfile: build/Dockerfile
 {{</highlight>}}
 {{</tab>}}
 

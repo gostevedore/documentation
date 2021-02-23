@@ -6,21 +6,21 @@ weight: 20
 {{<toc>}}
 
 ## General Description
-A builder holds those parameters required by a driver to proceed with the Docker's image building request, such the build context or its Dockerfile location, for instance. A builder is defnied by [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, following the specifications described below, on [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builder-configuration">}}).
+A builder holds those parameters required by a driver to proceed with the Docker's image building request, such the build context or its Dockerfile location, for instance. A builder is defnied by [`YAML`](https://en.wikipedia.org/wiki/YAML) data structure, following the specifications described on [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builder-configuration">}}).
 
-Builders can be defined as `global`, and could be used by any image, in that case the builder must be placed under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), or can be also defined inside the image definition, and it is known as `in-line` builder.
+Builders can be defined as `global`, which could be used by any image, and in that case the builder must be placed under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), or can be defined inside the image definition, that are known as `in-line` builders.
 
 ### Global builder
 Global builders are those builders that are defined under the `builders` block on [Stevedore configuration]({{<ref "/getting-started/configuration">}}) and can be used by any image on the images tree. 
 
-To include a `global` builder on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), it must be edited the file specified in [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}) configuration parameter, and place there the new definition, under the `builders`.
+To include a `global` builder on [Stevedore configuration]({{<ref "/getting-started/configuration">}}), it must be edited the file specified in [builder_path]({{<ref "/getting-started/configuration/#builder_path">}}) configuration parameter, and place there the new definition, under the `builders` block.
 
 For example, when `builder_path` is set as below:
 {{<highlight Yaml "linenos=table">}}
 builder_path: stevedore_builders.yaml
 {{</highlight>}}
 
-It must be edited the file `stevedore_builders.yaml` to include there the new builder. On next example are defined builder1, builder2 and builder3.
+The file `stevedore_builders.yaml` must be edited to include there the new builder. On next example are defined builder1, builder2 and builder3, under the `builders` block.
 {{<highlight Yaml "linenos=table">}}
 builders:
     builder1:
@@ -56,7 +56,7 @@ semantic_version_tags_templates [{{ .Major }}.{{ .Minor }}.{{ .Patch }}]
 ```
 
 ### In-line builder
-When is needed to build an image using an adhoc driver configuration, and to simplify the Stevedore configuration, the builder could be defined inside the [image configuration]({{<ref "reference-guide/image/">}}), in that case the builder is known as an `in-line` builder. 
+When is needed to build an image using an adhoc driver configuration, and to simplify Stevedore configuration, the builder could be defined inside the [image configuration]({{<ref "reference-guide/image/">}}). In that case the builder is known as an `in-line` builder. 
 In-line builders are also defined following the [Keywords reference for builders configuration]({{<ref "/reference-guide/builder/#keywords-reference-for-builder-configuration">}}).
 
 {{< highlight Yaml "linenos=table" >}}
@@ -76,29 +76,29 @@ my-image-base:
 On next table are described builder keywords attributes:
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When is created a `global` builder, its name is set by default as the yaml object's `key` where the builder is being defined. In case that the builder is defined such an `in-line` builder, its name is set as the image's name.|
+|**name**|*string*|Name of the builder<br><font color="#AA0088">*optional*</font>|When is created a `global` builder, its name is set by default as the yaml object's `key`, where the builder is being defined. In case that the builder is defined such an `in-line` builder, its name is set as the image's name.|
 |**driver**|*string*|Driver to be used to build the image<br><font color="#AA0088">*mandatory*</font>|The allowed values are:<br> - **ansible-playbook**<br> - **docker**|
 |**options**|*yaml object*|Options holds those parameters required by the driver<br><font color="#AA0088">*mandatory*</font>|Each driver requires its own configuration parameters.<br>Refer to [options reference]({{<ref "/reference-guide/builder/#options">}}) for detailed description.|
 |**variables_mapping**|*yaml object*|Maps a relationship from image’s attributs  to driver variables/parameteres/arguments<br><font color="#AA0088">*optional*</font>|Each driver requires its own variables mapping.<br>Refer to [variables mapping]({{<ref "/reference-guide/builder/#variables-mapping-reference">}}) for detailed description.|
 
 ### Options reference
-On the tabs below are described how to define the options yaml object for each driver.
+On the tabs below is described how to define the options yaml object for each driver.
 {{<tabs "builder-options">}}
 
 {{<tab "docker">}}
 ### docker
-Here is described builder's configuration options for `docker` driver.
+Here are described builder's configuration options for `docker` driver.
 
 #### Builder options
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**context**|*yaml object*|Is the Docker build's context where are placed the set fo files required to build an image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>|Each context type has its own specifications.<br>Refer [here]({{<ref "reference-guide/builder/#path-context">}}) for the `path` context details.<br>Refer [here]({{<ref "reference-guide/builder/#git-context">}}) for the `git` context details.|
+|**context**|*yaml object*|It is the Docker build's context where are placed the set fo files required to build an image. Context could be located either on a local path, `path` context, or in a git respository, `git` context.<br><font color="#AA0088">*mandatory*</font>|Each context type has its own specifications.<br>Refer [here]({{<ref "reference-guide/builder/#path-context">}}) for the `path` context details.<br>Refer [here]({{<ref "reference-guide/builder/#git-context">}}) for the `git` context details.|
 |**dockerfile**|*string*|`Dockerfiles`'s location path. The path is relative to context root<br><font color="#AA0088">*optional*</font>|By default, is used the `Dockerfile` located at context root|
 ---
 ##### Path context
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**path**|string|Path specifies where to find the files required to build the image<br><font color="#AA0088">*mandatory*</font>|-|
+|**path**|string|It specifies where to find the files required to build the image<br><font color="#AA0088">*mandatory*</font>|-|
 - Example
 {{<highlight Yaml "linenos=table">}}
     code:
@@ -110,14 +110,11 @@ Here is described builder's configuration options for `docker` driver.
 {{</highlight>}}
 
 ##### Git context 
-Git
-    repository
-    reference
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|git|*yaml object*|<br><font color="#AA0088">*mandatory*</font>|-|
-|repository|string|Repository specifies the git repository to find the files to build the image<br><font color="#AA0088">*mandatory*</font>|-|
-|reference|string|Repository reference to use to build the image<br><font color="#AA0088">*optional*</font>|By default, is used [`refs/heads/master`](https://pkg.go.dev/github.com/go-git/go-git/v5@v5.0.0/plumbing#ReferenceName) reference.|
+|git|*yaml object*|It is the keyword under which are defined the git repository details<br><font color="#AA0088">*mandatory*</font>|-|
+|repository|string|Repository specifies the git repository to find the files to build the image. `repository` keyword is placed under `git`.<br><font color="#AA0088">*mandatory*</font>|-|
+|reference|string|Repository reference required to build the image. `reference` keyword is placed under `git`.<br><font color="#AA0088">*optional*</font>|By default, is used [`refs/heads/master`](https://pkg.go.dev/github.com/go-git/go-git/v5@v5.0.0/plumbing#ReferenceName) reference, that belongs to [go-git](https://github.com/go-git/go-git) project.|
 - Example
 {{<highlight Yaml "linenos=table">}}
     code:
@@ -133,13 +130,13 @@ Git
 
 {{<tab "ansible-playbook">}} 
 ### ansible-playbook 
-Here is described builder's configuration options for `ansible-playbook` driver.
+Here are described builder's configuration options for `ansible-playbook` driver.
 
 #### Builder options
 |Keyword|Type|Description|Value|
 |---|:---:|---|---|
-|**playbook**|*string*|Is the playbook file location path<br><font color="#AA0088">*mandatory*</font>||
-|**inventory**|*string*|<br><font color="#AA0088">*mandatory*</font>||
+|**playbook**|*string*|It is the playbook file location path<br><font color="#AA0088">*mandatory*</font>|-|
+|**inventory**|*string*|It is the ansible-playbook inventory to be used<br><font color="#AA0088">*mandatory*</font>|It could be either an inventory file or and adhoc inventory, such `127.0.0.1,`|
 
 #### Example
 {{<highlight Yaml "linenos=table">}}
@@ -160,21 +157,22 @@ Here is described builder's configuration options for `ansible-playbook` driver.
 {{<tab "docker">}}
 |Key name|Description|Default Value|
 |---|---|---|
-|**image_builder_name_key**|               // Not comming from build's command flag|image_builder_name|
-|**image_builder_tag_key**|                // Not comming from build's command flag|image_builder_tag|
-|**image_builder_registry_namespace_key**| // Not comming from build's command flag|image_builder_registry_namespace|
-|**image_builder_registry_host_key**|      // Not comming from build's command flag|image_builder_registry_host|
-|**image_builder_label_key**||image_builder_label|
 |**image_from_name_key**||image_from_name|
-|**image_from_tag_key**||image_from_tag|
-|**image_from_registry_namespace_key**||image_from_registry_namespace|
 |**image_from_registry_host_key**||image_from_registry_host|
-|**image_name_key**||image_name|
-|**image_tag_key**||image_tag|
-|**image_extra_tags_key**||image_extra_tags|
-|**image_registry_namespace_key**||image_registry_namespace|
-|**image_registry_host_key**||image_registry_host|
-|**push_image_key**||push_image|
+|**image_from_registry_namespace_key**||image_from_registry_namespace|
+|**image_from_tag_key**||image_from_tag|
+||||
+|**image_builder_name_key**|n/a               // Not comming from build's command flag|image_builder_name|
+|**image_builder_tag_key**|n/a                // Not comming from build's command flag|image_builder_tag|
+|**image_builder_registry_namespace_key**|n/a // Not comming from build's command flag|image_builder_registry_namespace|
+|**image_builder_registry_host_key**|n/a      // Not comming from build's command flag|image_builder_registry_host|
+|**image_builder_label_key**|n/a|image_builder_label|
+|**image_name_key**|n/a|image_name|
+|**image_tag_key**|n/a|image_tag|
+|**image_extra_tags_key**|n/a|image_extra_tags|
+|**image_registry_namespace_key**|n/a|image_registry_namespace|
+|**image_registry_host_key**|n/a|image_registry_host|
+|**push_image_key**|n/a|push_image|
 {{</tab>}}
 
 {{<tab "ansible-playbook">}}

@@ -113,7 +113,7 @@ List of templates which define those extra tags to generate when 'semantic_versi
 - Default value:
 ```yaml 
     semantic_version_tags_templates:  
-    - {{ .Major }}.{{ .Minor }}.{{ .Patch }}
+    - "{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
 ```
 
 ### **builders**

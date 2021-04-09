@@ -172,10 +172,10 @@ Docker driver passes `variables mapping` to docker engine as build arguments and
 
 |Key name|Description|Default Value|
 |---|---|---|
-|**image_from_name_key**|Its value is referred to Dockerfile's argument name used to define the parent's image name.<br>The argument value is set such the parent's image name, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_name|
-|**image_from_registry_host_key**|Its value is referred to Dockerfile's argument name used to define the parent's registry host name.<br>The argument value is set such the parent's registry, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_host|
-|**image_from_registry_namespace_key**|Its value is referred to Dockerfile's argument name used to define the parent's registry namespace.<br>The argument value is set such the parent's namespace, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_namespace|
-|**image_from_tag_key**|Its value is referred to Dockerfile's argument name used to define the parent's image tag.<br>The argument value is set such the parent's version, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_tag|
+|**image_from_name_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's image name.<br>The argument value is set such the parent's image name, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_name|
+|**image_from_registry_host_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's registry host name.<br>The argument value is set such the parent's registry, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_host|
+|**image_from_registry_namespace_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's registry namespace.<br>The argument value is set such the parent's namespace, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_namespace|
+|**image_from_tag_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's image tag.<br>The argument value is set such the parent's version, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_tag|
 
 On the example below is defined a Dockerfile which uses the arguments passed from `stevedore`'s docker driver.
 {{<highlight shell "linenos=table">}}
@@ -192,38 +192,22 @@ RUN ...
 {{</tab>}}
 
 {{<tab "ansible-playbook">}}
-`ansible-playbook` driver passes each `variables mapping` entry as a runtime variable, also known an [extra-vars](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime)
+`ansible-playbook` driver passes each `variables mapping` entry as a runtime variable to ansible-playboook, also known an [extra-vars](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime).
+
+When is needed to create docker images using that driver, if the [playbook]({{<ref "/reference-guide/builder/#options-reference">}}) that performs the build has defined all this variables, `stevedore` fills them as extra-var by default, and will not be required variables definitions on [image tree]({{<ref "/getting-started/concepts/#image-tree">}}).
 |Key name|Description|Default Value|
 |---|---|---|
-|**image_builder_label_key**|When you create an image using the `ansible-playbook` driver, that argument value is the intermediate container's name, which is used during the provisioning process.<br>[Here]({{<ref "/reference-guide/driver/ansible-playbook/">}}) you could read how `ansible-playbook` works.|image_builder_label|
-|**image_from_name_key**|Its value is referred to Dockerfile's argument name used to define the parent's image name.<br>The argument value is set such the parent's image name, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_name|
-|**image_from_registry_host_key**|Its value is referred to Dockerfile's argument name used to define the parent's registry host name.<br>The argument value is set such the parent's registry, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_host|
-|**image_from_registry_namespace_key**|Its value is referred to Dockerfile's argument name used to define the parent's registry namespace.<br>The argument value is set such the parent's namespace, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_namespace|
-|**image_from_tag_key**|Its value is referred to Dockerfile's argument name used to define the parent's image tag.<br>The argument value is set such the parent's version, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_tag|
-|**image_name_key**||image_name|
-|**image_tag_key**||image_tag|
-|**image_extra_tags_key**||image_extra_tags|
-|**image_registry_namespace_key**||image_registry_namespace|
-|**image_registry_host_key**||image_registry_host|
-|**push_image_key**||push_image|
+|**image_builder_label_key**|When you create an image using the `ansible-playbook` driver, the intermediate container's name is set to the value injected through this variable.<br>[Here]({{<ref "/reference-guide/driver/ansible-playbook/">}}) you could read how `ansible-playbook` works.|image_builder_label|
+|**image_from_name_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's image name.<br>The argument value is set such the parent's image name, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_name|
+|**image_from_registry_host_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's registry host name.<br>The argument value is set such the parent's registry, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_host|
+|**image_from_registry_namespace_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's registry namespace.<br>The argument value is set such the parent's namespace, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_namespace|
+|**image_from_tag_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's image tag.<br>The argument value is set such the parent's version, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_tag|
+|**image_name_key**|The argument value received through this variable is used to set the resulting image name|image_name|
+|**image_tag_key**|The argument value received through this variable is used to set the resulting image tag|image_tag|
+|**image_registry_namespace_key**|The argument value received through this variable is used to set the resulting image registry namespace|image_registry_namespace|
+|**image_registry_host_key**|The argument value received through this variable is used to set the resulting image registry host|image_registry_host|
+|**image_extra_tags_key**|The argument value received through this variable should be used to create multiple tags for the built image|image_extra_tags_key|
+|**push_image_key**|Using that variable you could control whether to push the image to docker registry as soon as it has been built|push_image|
 {{</tab>}}
 
 {{</tabs>}}
-
-## Builder definition
-Builder definition must match to golang struct defined below. Options structure depends on each driver.
-{{<highlight golang "linenos=table">}}
-  type Builder struct {
-    Name    string         `yaml:"name"`
-    Driver    string         `yaml:"driver"`
-    Options   map[string]interface{} `yaml:"options"`
-    VarMapping  varsmap.Varsmap    `yaml:"variables_mapping"`
-  }
-{{</highlight>}}
-
-Set of builders must match to golang struct defined below
-{{<highlight golang "linenos=table">}}
-  type Builders struct {
-    Builders map[string]*Builder `yaml:"builders"`
-  }
-{{</highlight>}}

@@ -1,7 +1,7 @@
 ---
 title: Quick start
-date: "2020-01-31"
-weight: -20
+date: "2021-04-14"
+weight: 20
 ---
 
 {{<toc>}}
@@ -106,10 +106,10 @@ Global Flags:
 ```
 
 ## Define builders
-> NOTE: Not documented yet
+Refer to [builders]({{<ref "/reference-guide/builder/">}}) reference guide
 
-## Define the image tree
-> NOTE: Not documented yet
+## Define the images tree
+Refer to [images tree]({{<ref "/reference-guide/images-tree/">}}) reference guide
 
 ## Start building
 ```

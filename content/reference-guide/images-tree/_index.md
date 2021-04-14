@@ -1,15 +1,63 @@
 ---
 title: Images Tree
-date: "2020-01-31"
+date: "2021-04-14"
 weight: 20
 ---
 
-{{< hint warning >}}
-TODO
-{{< /hint >}}
+## General Description
+`images tree` contains the relationship among a bunch of [images]({{<ref "/reference-guide/image/">}}) and it is done by defining a map of maps data structure following the next rules:
 
+1. Images tree is defined by a [`YAML`](https://en.wikipedia.org/wiki/YAML) structure.
+2. The main key that contains the tree definition is named `images_tree`, which value is a map of maps data structure.
+3. Under `images_tree` are placed all the images' names that belong to images tree, as new level keys.
+4. Each image name key contains a new bunch of keys that identify the image versions.
+5. Image version's value is an [image]({{<ref "/reference-guide/image/">}}) definition.
 
-#
+- Example
+
+On that example you could see such as image's names key `ubuntu`, `php-fpm` and `php-cli`. Taking a look to `ubuntu` images, you could see the version `18.04` and `20.04`.
+
+{{<highlight Yaml "linenos=table">}}
+images_tree:
+  ubuntu:
+    18.04:
+      builder: global-infr-builder
+      children:
+      - php-fpm:
+        - "7.3"
+    20.04:
+      builder: global-infr-builder
+      children:
+      - php-fpm:
+        - "7.4"
+      - php-cli:
+        - "7.4"
+  php-fpm:
+    "7.3":
+      builder:
+        driver: docker
+        context:
+          path: php-fpm
+        vars:
+          version: "{{ .Version }}"
+    "7.4":
+      builder:
+        driver: docker
+        context:
+          path: php-fpm
+        vars:
+          version: "{{ .Version }}"
+  php-cli:
+    "7.4":
+      builder:
+        driver: docker
+        context:
+          path: php-fpm
+        vars:
+          version: "{{ .Version }}"
+{{</highlight>}}
+
+<!-- #
 # An images must be defined based on the golang struct defined below:
 # 
 #     type Image struct {
@@ -72,4 +120,4 @@ TODO
 #               context:
 #                 path: php-fpm
 #               vars:
-#                 version: 7.4
+#                 version: 7.4 -->

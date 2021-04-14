@@ -153,16 +153,20 @@ Here are described builder's configuration options for `ansible-playbook` driver
 
 ### Variables mapping reference
 
-`stevedore` injects through drivers a bunch of parameters to image building process. Among those parameters you could find the image from is based the built image or which tags are needed to be created. Those paramaters are defined on a `key-value` structure known as `variables mapping`.
-Internally, `stevedore` refers to each parameter by its key on `variables mapping` structure and you could override their values on the builder definition. 
+There is a bunch of parameters that `stevedore` always passes to image building process. Among those parameters you could find the image from is based the built image or which tags are needed to be created. Those paramaters are defined on a `key-value` structure known as `variables mapping`.
+Internally, `stevedore` refers to each parameter by its key on `variables mapping` structure and you could override their values (argument names) on the builder definition.
 
-`variables mapping` are passed such build arguments on `docker` driver or extra variables on `ansible-playbook` driver.
+{{<hint info>}}
+All variables that belong to `variables mapping` are always generated and passed to driver
+{{</hint>}}
+
+`variables mapping` are passed as build arguments on `docker` driver or as extra variables on `ansible-playbook` driver.
 Since each driver behaves on its own way, not all drivers uses the same set of `variables mapping`.
 
 To avoid any confusion you must understand which is the difference between a `variables mapping` key name, key value and an argument value.
 - **key name**: It is used internally by `stevedore` to identify the argument's name to use during the image building process
-- **key value**: It is the argument name and could be override on [builder]({{<ref "/getting-started/concepts/#builder">}}) definition
-- **argument value**: It is the value that `stevedore` gives to the argument before injecting it to image building process. That value comes from [image tree]({{<ref "/getting-started/concepts/#image-tree">}}) or CLI flags.
+- **key value**: It is the argument name passed to driver. It could be override on [builder]({{<ref "/getting-started/concepts/#builder">}}) definition
+- **argument value**: It is the value that `stevedore` gives to the argument before passing it to image building process. That value comes from [image tree]({{<ref "/getting-started/concepts/#image-tree">}}) or CLI flags.
 
 Below are defined the variables mapping for each driver.
 
@@ -170,7 +174,7 @@ Below are defined the variables mapping for each driver.
 {{<tab "docker">}}
 Docker driver passes `variables mapping` to docker engine as build arguments and each variable can be consumed as an [ARG](https://docs.docker.com/engine/reference/builder/#arg) inside the Dockerfile definition.
 
-|Key name|Description|Default Value|
+|Key name|Description|Default Value _(argument name)_|
 |---|---|---|
 |**image_from_name_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's image name.<br>The argument value is set such the parent's image name, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_name|
 |**image_from_registry_host_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's registry host name.<br>The argument value is set such the parent's registry, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_registry_host|
@@ -195,7 +199,7 @@ RUN ...
 `ansible-playbook` driver passes each `variables mapping` entry as a runtime variable to ansible-playboook, also known an [extra-vars](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#defining-variables-at-runtime).
 
 When is needed to create docker images using that driver, if the [playbook]({{<ref "/reference-guide/builder/#options-reference">}}) that performs the build has defined all this variables, `stevedore` fills them as extra-var by default, and will not be required variables definitions on [image tree]({{<ref "/getting-started/concepts/#image-tree">}}).
-|Key name|Description|Default Value|
+|Key name|Description|Default Value _(extra-var name)_|
 |---|---|---|
 |**image_builder_label_key**|When you create an image using the `ansible-playbook` driver, the intermediate container's name is set to the value injected through this variable.<br>[Here]({{<ref "/reference-guide/driver/ansible-playbook/">}}) you could read how `ansible-playbook` works.|image_builder_label|
 |**image_from_name_key**|The argument value received through this variable is referred to Dockerfile's argument name used to define the parent's image name.<br>The argument value is set such the parent's image name, defined on the [image tree]({{<ref "/getting-started/concepts/#image-tree">}})|image_from_name|

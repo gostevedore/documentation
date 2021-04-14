@@ -17,12 +17,12 @@ In case you are running another arch or os, you could build it from source.
 
 1. Achieve *Stevedore*'s tarball
 ```
-curl -sL https://github.com/gostevedore/stevedore/releases/download/v0.10.0/stevedore_0.10.0_Linux-x86_64.tar.gz > stevedore_0.10.0_Linux-x86_64.tar.gz
+curl -sL https://github.com/gostevedore/stevedore/releases/download/v0.10.2/stevedore_0.10.2_Linux-x86_64.tar.gz > stevedore_0.10.2_Linux-x86_64.tar.gz
 ```
 
 2. Untar the package
 ```
-tar xzfv stevedore_0.10.0_Linux-x86_64.tar.gz
+tar xzfv stevedore_0.10.2_Linux-x86_64.tar.gz
 ```
 
 3. You can create a symlink to *stevedore*'s binary

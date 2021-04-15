@@ -4,7 +4,7 @@ date: "2020-01-31"
 weight: 20
 ---
 
-On that section there is a brief description of the main Stevedore components or term that appears a long that documentation.
+On that section there is a brief description of the main Stevedore components or terms that appears a long that documentation.
 
 {{<toc>}}
 
@@ -12,12 +12,12 @@ On that section there is a brief description of the main Stevedore components or
 The process that generates a Docker image is named the build.
 
 ### Builder
-A Builder holds those parameters required by a driver to proceed with the building request, such the build context or your Dockerfile location, for instance. 
+A Builder holds those parameters required by a driver to proceed with the building request, such as the build context or Dockerfile location, for example. 
 
-You can define as many builders as you need for each driver. For example, suppose that you have a dozen of microservices written in Golang and another bunch in Python. All your Golang microservices are built in the same way, then you can define one builder to create all the golang's microservices images. Regarding Python microservices you can also do the same. Finally, all your microservices can be built defining two builders.
+You can define as many builders as you need using the same driver. For example, suppose that you have a dozen of microservices written in Golang and another bunch in Python. All your Golang microservices are built in the same way, then you can define one builder to create all the golang's microservices images. Regarding Python microservices you can also do the same. Finally, all your microservices can be built defining two builders.
 
-A Builder could be defined as `global`, in that case it can be used by any image, and must be placed under the `builders` definition on your configuration. 
-On the snipped below there are defined two global builders: `code`, at line 2 and `infrastructure`, at line 7.
+A Builder could be defined as `global`, in that case must be placed under the `builders` definition on your configuration and then it can be used by any image. 
+On the snipped below there are defined two global builders: `code`, at *line 2* and `infrastructure`, at *line 7*.
 {{< highlight Yaml "linenos=table" >}}
 builders:
     code:
@@ -25,7 +25,7 @@ builders:
         options:
             context:
                 path: .
-    infrastructure:
+    global-infr-builder:
         driver: ansible-playbook
         options:
             inventory: inventory/all
@@ -33,7 +33,7 @@ builders:
 {{< /highlight >}}
 
 You could also define the builder inside the image definition, and it is known as `in-line` builder.
-On that other snipped is defined an in-line builder:
+On that other snipped is defined an `in-line` builder:
 {{< highlight Yaml "linenos=table" >}}
   simple-go-helloworld:
     "0.0.1":
@@ -84,14 +84,14 @@ my-image-base:
 {{< /highlight >}}
 
 ### Image tree
-On Stevedore's startup are loaded all images that can be built, and those images are loaded from the image tree. Therefore, the image tree contains all those images which you can deal with, through by Stevedore. 
+On Stevedore's startup are loaded all images that can be built, and those images are loaded from the image tree. Therefore, the image tree contains all those images which you can deal with `stevedore`. 
 
 On the snipped below there is shown an image tree where are defined three images: `my-image-base`, at line 2, `my-ms1`,at line 21, and `my-ms2`, at line 32.
 {{< highlight Yaml "linenos=table" >}}
 images_tree:
     my-image-base:
         "stable":
-            registry: my-registry.my-domain.cat 
+            registry: my-registry.example.com 
             namespace: library
             tags:
             - latest 
@@ -110,32 +110,33 @@ images_tree:
                         path: my-image-base
     my-ms1:
         "0.0.1":
-            registry: my-registry.my-domain.cat 
+            registry: my-registry.example.com 
             namespace: library
         devel:
-            registry: my-registry.my-domain.cat 
+            registry: my-registry.example.com 
             namespace: library
         "*":
-            registry: my-registry.my-domain.cat 
+            registry: my-registry.example.com 
             namespace: library
             version: "{{ .Version }}"
     my-ms2:
         "0.1.5":
-            registry: my-registry.my-domain.cat 
+            registry: my-registry.example.com 
             namespace: library
         "*":
-            registry: my-registry.my-domain.cat 
+            registry: my-registry.example.com 
             namespace: library
             version: "{{ .Version }}"
 {{< /highlight >}}
 
 ### Promote
-Promote an image, on Stevedore context, means to push an image to another Docker registre or to another location on the same Docker registry.
+Promote an image, on Stevedore context, means to push an image to another Docker registre or to another namespace on the same Docker registry.
 
 ### Semver tag
 When a tag is [semver 2.0.0](https://semver.org/) compliance is known as semver tag.
 
 ### Wildcard version
+A wildcard version are those versions that its value on [image_tree]({{<ref "/getting-started/concepts/#image-tree">}}) is an `*` *(start)*. Defining an image with a wildcard version let you to build that image with a free version value. In that case, the version value is set through `--image-version` flag on [stevedore build]({{<ref "/reference-guide/cli/#build">}}) command.
 
 ### Variables mapping
 A variables mapping (a.k.a. varmap or varmapping) is a builder's optional attribute where are defined the name of those variable that are automatically passed to the driver, when is built an image. Each driver could define its own varmap. For further information see the [reference guide]({{<ref "/reference-guide/builder/#variables-mapping-reference">}})

@@ -7,10 +7,10 @@ weight: 20
 {{<toc>}}
 
 ## Stevedore configuration
-When Stevedore runs, it tries to read its configuration firsly from environment variables and then from local configuration file, otherwise it uses the default values.
+When Stevedore runs, it tries to read its configuration firsly from local configuration file and then from environment variables, otherwise it uses the default values.
 
 {{< hint warning >}}
-The most precedence configuration is these which is loaded from `--config` flag's gived file.
+In case you set the configuration using the `--config` flag on `stevedore` cli, it overrides any other configuration.
 {{< /hint>}}
 
 ### Configuration from environment variables
@@ -24,7 +24,7 @@ By default, Stevedore looks for a configuration on the files listed below, and l
 2. ~/.config/stevedore/stevedore.yaml
 3. ~/stevedore.yaml
 
-You could also load the configuration from a custom location and it is done by `--config` flag when stevedore cli is launched. Loading configuration from a custom location has precedence over environment variables.
+You could also load the configuration from a custom location using `--config` flag on stevedore cli. Loading configuration from a custom location has precedence over any other configuration.
 
 ## Create configuration file
 You can create a configuration file by yourself or you could use stevedore cli to do it.
@@ -74,7 +74,7 @@ Log file location path.
 ```
 
 ### **num_workers**
-It defines the number of workers to build images which corresponds to the number of images that can be build concurrently.
+It defines the number of workers to build images. That corresponds to the number of images that can be build concurrently.
 - Default value:
 ```yaml 
     num_workers: 4
@@ -109,7 +109,7 @@ Generate extra tags when the main image tags is semver 2.0.0 compliance.
 ```
 
 ### **semantic_version_tags_templates**
-List of templates which define those extra tags to generate when 'semantic_version_tags_enabled' is enabled.
+List of templates that defines the extra tags to generate when 'semantic_version_tags_enabled' is enabled.
 - Default value:
 ```yaml 
     semantic_version_tags_templates:  

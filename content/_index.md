@@ -4,7 +4,7 @@ date: "2020-01-31"
 weight: 20
 ---
 
-Stevedore, a way to manage and govern the Docker image's building process
+Stevedore, the docker images factory
 
 ## What is Stevedore?
 
